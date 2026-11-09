@@ -1,0 +1,68 @@
+
+name: Build APK TaskMate
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'app.js'
+      - 'config.js'
+      - 'index.html'
+      - 'styles.css'
+      - 'excel-import.js'
+      - 'roster-data.js'
+      - 'sw.js'
+      - 'icons/**'
+      - 'android-icons/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'capacitor.config.json'
+      - '.github/workflows/build-apk.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build-debug-apk:
+    name: Build Android debug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Android SDK
+        uses: android-actions/setup-android@v4
+
+      - name: Install Capacitor dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Generate Android project and permissions
+        run: npm run android:init
+
+      - name: Build APK (debug)
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TaskMate-v10-debug-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 30
