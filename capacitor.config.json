@@ -1,0 +1,9 @@
+{
+  "appId": "com.taskmate.reminder",
+  "appName": "TaskMate Reminder",
+  "webDir": "www",
+  "server": {
+    "hostname": "localhost",
+    "androidScheme": "https"
+  }
+}

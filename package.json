@@ -1,0 +1,22 @@
+{
+  "name": "taskmate-reminder-android",
+  "version": "10.0.1",
+  "private": true,
+  "description": "TaskMate v10: GitHub Pages + Android APK build using Capacitor",
+  "scripts": {
+    "android:prepare-web": "node scripts/prepare-web.mjs",
+    "android:init": "npm run android:prepare-web && npx cap add android && npx cap sync android && node scripts/patch-native.mjs",
+    "android:sync": "npm run android:prepare-web && npx cap sync android && node scripts/patch-native.mjs",
+    "android:debug": "npm run android:sync && cd android && ./gradlew assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.0.0",
+    "@capacitor/core": "8.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.0.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
